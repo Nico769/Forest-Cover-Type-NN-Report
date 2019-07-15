@@ -1,0 +1,37 @@
+\chapter{The problem}
+Through this project we intend to become familiar with imbalanced multi-class supervised classification problems. To serve this purpose, we decided to explore the Forest Cover type dataset in the UCI Machine Learning Repository. The dataset comprises observations taken from 30m by 30m patches of the Roosevelt National Forest (in northern Colorado) that are labelled upon the main cover type of that patch.
+\section{Dataset overview}
+The training set counts $15\,120$ observations while the test set $565\,892$. The data comes from the US Geological Survey
+(USGS) and the US Forest Service (USFS) and, in particular, for each patch the following 12 variables (with their units of measure) plus the labels are provided:
+\begin{enumerate}
+	\item Elevation (m),
+	\item Aspect (azimuth from true north),
+	\item Slope ($^{\circ}$),
+	\item Horizontal distance to nearest surface water feature (m),
+	\item Vertical distance to nearest surface water feature (m),
+	\item Horizontal distance to nearest roadway (m),
+	\item Hillshade 9am: a relative measure of incident sunlight at 09:00 h on the summer solstice (index),
+	\item Hillshade Noon: a relative measure of incident sunlight at noon on the summer solstice (index),
+	\item Hillshade 3pm: a relative measure of incident sunlight at 15:00 h on the summer solstice (index),
+	\item Horizontal distance to nearest historic wildfire ignition point (m),
+	\item Wilderness area: the macro-area the patch belongs to (four binary values, one for each wilderness area),
+	\item Soil type: the principal soil type in the patch (40 binary values, one for each soil type),
+	\item Cover type: forest cover type (classes from 1 to 7, one for each patch).
+\end{enumerate}
+\begin{table}[]
+\centering
+	\begin{tabular}{ll}
+		Cover type & Occurrences \\
+		1          & $211\,840$      \\
+		2          & $283\,301$      \\
+		3          & $35\,754$       \\
+		4          & $2\,747$        \\
+		5          & $9\,493$       \\
+		6          & $17\,367$      \\
+		7          & $20\,510$       \\
+		Total      & $581\,012$     
+	\end{tabular}
+\caption{Number of observations within each forest cover type class}
+\label{tab:covertypes}
+\end{table}
+Table \ref{tab:covertypes} shows that the dataset is imbalanced. Requiring a training set where all classes are equally represented, it is necessary to reduce the size of the former. Therefore, according to REFERENCE NOTE the training set (which includes the validation data) should follow the approach of Figure METTERE LA FIGURA DELLA TABELLA. The relative sizes of the train and test sets make the classification a challenging problem, because the train set is $\sim2.6\%$ of the overall dataset.
