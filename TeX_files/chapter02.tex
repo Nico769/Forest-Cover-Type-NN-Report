@@ -1,1 +1,13 @@
-\chapter{The Second Chapter}
+\chapter{The models}
+In this chapter we discuss several neural network classifiers and their results on our dataset.
+\section{Baseline model}
+We decided to start with an adaptation of the \textit{optimal} model's architecture shown in \cite{blackardDean}. This model is made of 51 input nodes, 120 hidden nodes and seven output nodes (symbolized as 51-120-7) where each layer is fully connected. Both the hidden and output layers utilized the logistic (sigmoid) activation functions:
+$$
+\sigma(a) = \frac{1}{1 + e^{-a}}
+$$
+Given the training set size, we picked SGD (Stochastic Gradient Descent) as loss function optimizer, while the loss function is the classic MSE (Mean Squared Error, as in \cite{blackardDean}):
+\begin{equation}
+\text{MSE} = \frac{1}{n}\sum_{i=1}^{n}(Y_i - Y^{*}_{i})^2
+\end{equation}
+where $Y_i$ is the vector of the true values of the target and $Y^{*}_{i}$ is the model's prediction.
+\section{Our model}

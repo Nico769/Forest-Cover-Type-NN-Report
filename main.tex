@@ -2,20 +2,28 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{cite}
+\usepackage[nottoc,numbib]{tocbibind}
 \usepackage{microtype}
+\usepackage{lscape}
+\usepackage{rotating}
 \usepackage{mathtools}
 \usepackage{amssymb,amsmath}
 \setlength{\jot}{3ex}
 \usepackage{relsize}
 \usepackage{caption}
 \captionsetup[figure]{font=small,labelfont=small,margin={40pt,40pt}}
-\usepackage[english]{babel} 
+\usepackage[english]{babel}
+
+\doublespacing
 
 \begin{document}
 
-\author{TeXstudio Team}
-\title{Simple Book Example}
-\date{January 2013}
+\author{Francesco Casciola, Nicola Landolfi}
+\title{Machine Learning report}
+\date{July 2019}
 
 \frontmatter
 \maketitle
@@ -26,6 +34,7 @@
 \include{./TeX_files/chapter02}
 
 \backmatter
-% bibliography, glossary and index would go here.
+\bibliography{bib}{}
+\bibliographystyle{plain}
 
 \end{document}
