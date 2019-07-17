@@ -20,7 +20,7 @@ The training set counts $15\,120$ observations while the test set $565\,892$. Th
 	\item Cover type: forest cover type (classes from 1 to 7, one for each patch).
 \end{enumerate}
 Table \ref{tab:covertypes} shows that the dataset is imbalanced. Requiring a training set where all classes are equally represented, it is necessary to reduce the size of the former. Therefore, according to \cite{blackardDean} the training set (which includes the validation data) should follow the approach of Figure \ref{fig:covertypesdims}. The relative sizes of the train and test sets make the classification a challenging problem, because the train set is $\sim2.6\%$ of the overall dataset.
-\begin{table}[]
+\begin{table}
 	\centering
 	\begin{tabular}{ll}
 		Cover type & Occurrences \\

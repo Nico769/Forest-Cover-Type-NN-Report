@@ -16,7 +16,7 @@ where $Y_i$ is the vector of the true values of the target, $Y^{*}_{i}$ is the m
 	\caption{Baseline model diagram.}
 	\label{fig:baselinemodel}
 \end{figure}
-Setting the learning rate (LR) to $0.05$, the batch size to $128$ and the number of epochs to $200$ the classifier has been trained via 10-fold cross-validation. The accuracy on the train set and the validation set is shown in Figure \ref{fig:baselinemodelacc} while the losses in Figure \ref{fig:baselinemodelloss}.
+Setting the learning rate (LR) to $0.05$, the batch size to $128$ and the number of epochs to $200$ the classifier has been trained via a 10-fold cross-validation. The accuracy on the train set and the validation set is shown in Figure \ref{fig:baselinemodelacc} while the losses in Figure \ref{fig:baselinemodelloss}: to smooth the plots, the last metric value for each fold has been taken into account. Given the multi-class nature of the classification task, Figure \ref{fig:confmatheatmap} represent the heat-map rendering of the classification matrix to better convey the information regarding the correctly classified/misclassified samples: it is easy to notice that $532$ samples, of the total $587$ in the test set, belonging to the minority class (Cottonwood/Willow) are correctly classified; $5285$ are misclassified as the minority class but they belong to Ponderosa Pine. Moreover, a good amount of Spruce/Fir samples are correctly classified (this should be expected since this class is one of the majority classes). PARLARE DI PRECISION-RECALL-F1SCORE?
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\textwidth]{./TeX_files/img/baselinemodelacc.png}
@@ -28,5 +28,11 @@ Setting the learning rate (LR) to $0.05$, the batch size to $128$ and the number
 	\includegraphics[width=0.7\textwidth]{./TeX_files/img/baselinemodelloss.png}
 	\caption{Baseline model losses.}
 	\label{fig:baselinemodelloss}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{./TeX_files/img/confmatheatmap.png}
+	\caption{Heat-map rendering of the confusion matrix.}
+	\label{fig:confmatheatmap}
 \end{figure}
 \section{Our model}
