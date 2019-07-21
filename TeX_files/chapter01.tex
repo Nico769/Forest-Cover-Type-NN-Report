@@ -3,7 +3,7 @@ Through this project we intend to become familiar with imbalanced multi-class su
 
 \section{Dataset overview}
 The training set counts $15\,120$ observations while the test set $565\,892$. The data comes from the US Geological Survey
-(USGS) and the US Forest Service (USFS) and, in particular, for each patch the following 12 variables (with their units of measure) plus the labels are provided:
+(USGS) and the US Forest Service (USFS). For each patch the following 12 variables (and their units of measurement) plus the labels are provided:
 \begin{enumerate}
 	\item Elevation (m),
 	\item Aspect (azimuth from true north),
@@ -19,7 +19,7 @@ The training set counts $15\,120$ observations while the test set $565\,892$. Th
 	\item Soil type: the principal soil type in the patch (40 binary values, one for each soil type),
 	\item Cover type: forest cover type (classes from 1 to 7, one for each patch).
 \end{enumerate}
-Table \ref{tab:covertypes} shows that the dataset is imbalanced. Requiring a training set where all classes are equally represented, it is necessary to reduce the size of the former. Therefore, according to \cite{blackardDean} the training set (which includes the validation data) should follow the approach of Figure \ref{fig:covertypesdims}. The relative sizes of the train and test sets make the classification a challenging problem, because the train set is $\sim2.6\%$ of the overall dataset.
+Table \ref{tab:covertypes} shows that the dataset is imbalanced. For an effective classifier all classes should be equally represented in the training set, thus it is necessary to reduce its size. According to \cite{blackardDean} the training set (which includes the validation data) should follow the approach of Figure \ref{fig:covertypesdims}. The relative sizes of the training and testing sets make the classification a challenging problem since the training set is $\sim2.6\%$ of the overall dataset.
 \begin{table}
 	\centering
 	\begin{tabular}{ll}
@@ -39,27 +39,27 @@ Table \ref{tab:covertypes} shows that the dataset is imbalanced. Requiring a tra
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{./TeX_files/img/covertypetable.png}
-	\caption{Number of observations within each forest cover type class for each data set}
+	\caption{Number of observations within each forest cover type class for each dataset. The validation set is $25\%$ the size of the training set.}
 	\label{fig:covertypesdims}
 \end{figure}
 
 \section{Feature engineering}
 \label{sec:feat_eng}
-It is important to notice that the analysis, from now on, has been done on the training set only (to avoid data contamination). The total amount of features is 54, thus, a simple manual feature selection is applied: for example, Figure \ref{fig:elevationhist} shows the elevation grouped by each cover type; it is quite clear that classes 4 (Cottonwood/Willow), 5 (Aspen) and 7 (Krummholz) are separable. Focusing on the numerical features, Figure \ref{fig:fullcorrmatrix} shows the correlation plots for each of them. Therefore, the most interesting positive correlation results are $0.6521$ and $0.6145$ for the couples <<Vertical\_Distance\_To\_Hydrology - Horizontal\_Distance\_To\_Hydrology>> and <<Hillshade\_Noon - Hillshade\_3pm>>, respectively. While for the negative correlation there is $-0.7800$ for the couple <<Hillshade\_9am - Hillshade\_3pm>>. From these observations, two new features could substitute the ones used for their computation allowing us to reduce the dimension of the feature space:
+It is important to notice that the analysis, from now on, has been done on the training set only (to avoid data leakage \cite{smialowski2009}). The total number of features is 54, thus, simple feature selection is done: for example, Figure \ref{fig:elevationhist} shows the elevation feature grouped by each cover type and it is quite clear that classes 4 (Cottonwood/Willow), 5 (Aspen) and 7 (Krummholz) are easily separable; focusing on the numerical features, Figure \ref{fig:fullcorrmatrix} shows the correlation plots for each of them and we noticed that the couples <<Vertical\_Distance\_To\_Hydrology - Horizontal\_Distance\_To\_Hydrology>> and <<Hillshade\_Noon - Hillshade\_3pm>> are both highly correlated (positive correlation coefficients are $0.6521$ and $0.6145$, respectively). Furthermore, the couple <<Hillshade\_9am - Hillshade\_3pm>> has a negative correlation coefficient equal to $-0.7800$. From these observations, two new features could substitute the ones used for their computation allowing us to reduce the dimension of the feature space:
 \begin{itemize}
 \item Distance\_To\_Hydrology: the Euclidean distance computed on Vertical\_Distance\_To\_Hydrology and Horizontal\_Distance\_To\_Hydrology,
 \item Mean\_Hillshade: the mean value of the three Hillshade features.
 \end{itemize}
-Moreover Hillshade\_3pm missing values ($88$ zeros) have been imputed with the median over all the training samples and one-hot encoding has been applied to the target variable yielding 7 binary variables. Finally, all the numerical features were scaled with zero mean and unit variance (standardization).
-\subsection{Scaling of the circular quantities}
-There is a problem, though, when scaling the <<Aspect>> and <<Slope>> features: being circular quantities, the standardization can't be executed in the usual way, but it's necessary to recur to the `directional statistics' theory to compute the mean value and standard deviation of the two. Given $x\in(-\pi,\pi]$ we can obtain
-$$
+Moreover, Hillshade\_3pm missing values ($88$ zeros) have been imputed with the median over all the training samples and one-hot encoding has been applied to the target variable yielding 7 binary variables. Finally, the numerical features were scaled to zero mean and unit variance (standardization \cite{wiki:standardization}).
+\subsection{Circular quantities scaling}
+Scaling <<Aspect>> and <<Slope>> features via standardization can't be done in the usual way: being circular quantities it's necessary to recur to \textit{directional statistics} theory to compute the mean value and standard deviation of the two. Given $x\in(-\pi,\pi]$ we obtain
+\begin{equation}
 \begin{aligned}
-&\mu&=&\quad\text{atan2}\Bigg(\underbrace{\frac{1}{N}\sum_{j=1}^{N}\sin{x}}_{\mathcal{S}},\underbrace{\frac{1}{N}\sum_{j=1}^{N}\cos{x}}_{\mathcal{C}}\Bigg) \text{,}\\
+&\mu&=&\quad\text{atan2}\Bigg(\underbrace{\frac{1}{N}\sum_{j=1}^{N}\sin{x}}_{\mathcal{S}},\underbrace{\frac{1}{N}\sum_{j=1}^{N}\cos{x}}_{\mathcal{C}}\Bigg) \text{,} \\
 &\sigma&=&\quad\sqrt{-2\ln\left(\sqrt{\mathcal{C}^2+\mathcal{S}^2}\right)}\text{,}
 \end{aligned}
-$$   
-where $\mu$ is the mean value of the set and $\sigma$ is the standard deviation. Using these formulae it's possible to standardize correctly the aforementioned features.
+\end{equation}   
+where $\mu$ is the mean value of the set and $\sigma$ is the standard deviation.
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{./TeX_files/img/elevationhist.png}
