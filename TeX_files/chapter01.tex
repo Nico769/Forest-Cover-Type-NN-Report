@@ -52,7 +52,7 @@ It is important to notice that the analysis, from now on, has been done on the t
 \end{itemize}
 Moreover, Hillshade\_3pm missing values ($88$ zeros) have been imputed with the median over all the training samples and one-hot encoding has been applied to the target variable yielding 7 binary variables. Finally, the numerical features were scaled to zero mean and unit variance (standardization \cite{wiki:standardization}).
 \subsection{Circular quantities scaling}
-Scaling <<Aspect>> and <<Slope>> features via standardization can't be done in the usual way: being circular quantities it's necessary to recur to \textit{directional statistics} theory to compute the mean value and standard deviation of the two. Given $x\in(-\pi,\pi]$ we obtain
+Scaling <<Aspect>> and <<Slope>> features via standardization can't be done in the usual way \cite{wiki:directionalstats}: being circular quantities it's necessary to recur to \textit{directional statistics} theory to compute the mean value and standard deviation of the two. Given $x\in(-\pi,\pi]$ we obtain
 \begin{equation}
 \begin{aligned}
 &\mu&=&\quad\text{atan2}\Bigg(\underbrace{\frac{1}{N}\sum_{j=1}^{N}\sin{x}}_{\mathcal{S}},\underbrace{\frac{1}{N}\sum_{j=1}^{N}\cos{x}}_{\mathcal{C}}\Bigg) \text{,} \\
