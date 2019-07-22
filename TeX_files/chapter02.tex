@@ -142,10 +142,12 @@ test set accuracy          & 0.7323    & 0.7323 & 0.7323   & 0.7323  \\ \hline
 \caption{Precision, recall, f1-score summary table for the one hidden layer model.}
 \label{tab:onehiddenclassificationrep}
 \end{table}
+
 \subsection{Two hidden layers network}
 \label{sec:twohidden}
 Based on our experience with the Forest Cover Type dataset we came up with a different architecture shown in Figure \ref{fig:twohiddenmodel}. This model consists of 51 input nodes, 2 hidden layers (the first one made of 30 nodes while the second one of 15 nodes) and seven nodes for the output layer; each layer is fully connected, as usual. Both hidden layer activation functions are ReLU and the output layer activation function is, again, the softmax. The loss function optimizer and the loss function are equal to the one hidden layer model.
 After running a grid-search algorithm over a set of hyperparameters, the best model was found (learning rate to $0.3$, batch size to $128$ and number of epochs to $100$): the classifier has then been trained via a 10-fold cross-validation. The accuracy on the training set and the validation set is shown in Figure \ref{fig:twohiddenmodelacc} while the losses in Figure \ref{fig:twohiddenmodelloss}. Even though the network performs slightly worse than onehidden-51-120-7, it has $2085$ edges (vs $6960$) thus the computational burden is less heavy (\textit{Parsimony principle}\cite{gori}).
+
 \begin{figure}
 \centering
 \includegraphics[width=0.7\textwidth]{./TeX_files/img/twohiddenmodel.png}
@@ -153,7 +155,7 @@ After running a grid-search algorithm over a set of hyperparameters, the best mo
 \label{fig:twohiddenmodel}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{./TeX_files/img/twohiddenmodelacc.png}
 \caption{Two hidden layers model accuracy.}
@@ -165,13 +167,6 @@ After running a grid-search algorithm over a set of hyperparameters, the best mo
 \includegraphics[width=0.7\textwidth]{./TeX_files/img/twohiddenmodelloss.png}
 \caption{Two hidden layers model losses.}
 \label{fig:twohiddenmodelloss}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{./TeX_files/img/twohiddenconfmatheatmap.png}
-\caption{Heat-map rendering of the confusion matrix for the two hidden layers model.}
-\label{fig:twohiddenconfmatheatmap}
 \end{figure}
 
 \begin{table}
@@ -192,4 +187,91 @@ test set accuracy          & 0.7019    & 0.7019 & 0.7019   & 0.7019      \\ \hli
 }
 \caption{Precision, recall, f1-score summary table for the two hidden layers model.}
 \label{tab:twohiddenclassificationrep}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{./TeX_files/img/twohiddenconfmatheatmap.png}
+	\caption{Heat-map rendering of the confusion matrix for the two hidden layers model.}
+	\label{fig:twohiddenconfmatheatmap}
+\end{figure}
+
+\subsection{Varying the previous models}
+Since removing redundant features allowed the machine to perform better, we decided to accomplish feature selection in a more automatized way. We modified the models seen in Section \ref{sec:onehidden} and \ref{sec:twohidden} by adding two hidden layers before the first hidden layer of each of the previous models. The first of two new hidden layers has $\nu<\text{51}$ units, while the second has 51 inspired by a generic auto-encoder architecture in Figure \ref{fig:autoencoder}.
+\newline
+Auto-encoders is a class of neural networks generally trained using as labels the training set itself, with the hope that the machine will learn an underlying set of rules that allows it to create a simplified representation of the data. The hidden layers bottleneck of an auto-encoder allows the data to be represented in a low dimensionality space that can then be used to reconstruct the input data after the bottleneck. The reason why we tried these schemes is that we hope to get a similar effect, except for the fact that we aren't interested in reconstructing the input data, but we want to use the bottleneck for an automated feature reduction. Running a grid-search algorithm over a set of possible $\nu$ values we picked the candidate substitutes for the previous networks. Moreover, we also noticed that, when using these networks, the loss in training and validation phase reaches rapidly a good value and then starts oscillating around it. Thus, we tried to change the split ratio between training and validation set for the 10-fold cross validation algorithm to $60\%/40\%$ to avoid overfitting. Ultimately two good networks were found, symbolised as: onehidden\_red-51-49-51-120-7 and twohidden\_red-51-46-51-30-15-7.
+\newline
+During the training of onehidden\_red-51-49-51-120-7 the same learning rate as for onehidden-51-120-7 was used. While for twohidden\_red-51-46-51-30-15-7 the learning rate is $0.5$ and this network performs better ($\sim +3.4\%$ of accuracy) than the twohidden-51-30-15-7 seen in Section \ref{sec:twohidden}.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.45\textwidth]{./TeX_files/img/autoenc.eps}
+	\caption{Generic auto-encoder layout}
+	\label{fig:autoencoder}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth]{./TeX_files/img/m1_auto_acc.png}
+	\caption{onehidden\_red-51-49-51-120-7 model accuracy.}
+	\label{fig:m1automodelacc}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth]{./TeX_files/img/m1_auto_loss.png}
+	\caption{onehidden\_red-51-49-51-120-7 model losses.}
+	\label{fig:m1automodelloss}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth]{./TeX_files/img/m2_auto_acc.png}
+	\caption{twohidden\_red-51-46-51-30-15-7 model accuracy.}
+	\label{fig:m2automodelacc}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth]{./TeX_files/img/m2_auto_loss.png}
+	\caption{twohidden\_red-51-46-51-30-15-7 model losses.}
+	\label{fig:m2automodelloss}
+\end{figure}
+
+\begin{table}
+	\centering
+	\resizebox{0.9\textwidth}{!}{
+		\begin{tabular}{ccccc}
+			& precision & recall & f1-score & support \\ \hline
+			Spruce/Fir        & 0.7503    & 0.7708 & 0.7604   & 209680  \\ \hline
+			Lodgepole Pine    & 0.8482    & 0.6837 & 0.7571   & 281141  \\ \hline
+			Ponderosa Pine    & 0.7880    & 0.8498 & 0.8177   & 33594   \\ \hline
+			Cottonwood/Willow & 0.2351    & 0.9625 & 0.3779   & 587     \\ \hline
+			Aspen             & 0.2199    & 0.9399 & 0.3564   & 7333    \\ \hline
+			Douglas-fir       & 0.5564    & 0.8712 & 0.6791   & 15207   \\ \hline
+			Krummholz         & 0.5867    & 0.9617 & 0.7288   & 18350   \\ \hline
+			weighted avg      & 0.7833    & 0.7435 & 0.7533   & 565892  \\ \hline
+			test set accuracy          & 0.7435    & 0.7435 & 0.7435   & 0.7435  \\ \hline
+		\end{tabular}
+	}
+	\caption{Precision, recall, f1-score summary table for onehidden\_red-51-46-51-120-7.}
+\end{table}
+
+\begin{table}
+	\centering
+	\resizebox{0.9\textwidth}{!}{
+		\begin{tabular}{ccccc}
+			& precision & recall & f1-score & support \\ \hline
+			Spruce/Fir        & 0.7606    & 0.7098 & 0.7343   & 209680  \\ \hline
+			Lodgepole Pine    & 0.8092    & 0.7182 & 0.7610   & 281141  \\ \hline
+			Ponderosa Pine    & 0.7843    & 0.8386 & 0.8105   & 33594   \\ \hline
+			Cottonwood/Willow & 0.2228    & 0.9642 & 0.3620   & 587     \\ \hline
+			Aspen             & 0.2455    & 0.9183 & 0.3874   & 7333    \\ \hline
+			Douglas-fir       & 0.5107    & 0.8369 & 0.6343   & 15207   \\ \hline
+			Krummholz         & 0.5834    & 0.9495 & 0.7227   & 18350   \\ \hline
+			weighted avg      & 0.7664    & 0.7358 & 0.7441   & 565892  \\ \hline
+			test set accuracy & 0.7358    & 0.7358 & 0.7358   & 0.7358  \\ \hline
+		\end{tabular}
+	}
+	\caption{Precision, recall, f1-score summary table for twohidden\_red-51-46-51-30-15-7.}
 \end{table}
